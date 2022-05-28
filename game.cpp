@@ -5,7 +5,7 @@ Game::Game()
       PATH_TO_PADDLE_PIXMAP(":/images/paddle.png"), PATH_TO_BALL_PIXMAP(":/images/ball.png"),
       PATH_TO_BLOCKS_PIXMAP{":/images/block01.png", ":/images/block02.png", ":/images/block03.png",
                             ":/images/block04.png", ":/images/block05.png"},
-      COUNT_OF_KIND_OF_BLOCKS(5), ITERATION_VALUE(1000.0f/60.0f)
+      COUNT_OF_KIND_OF_BLOCKS(5), ITERATION_VALUE(1000.0f/60.0f), m_isBallStucked(true)
 {
 
 }

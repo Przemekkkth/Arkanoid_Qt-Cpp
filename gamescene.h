@@ -19,6 +19,7 @@ private slots:
 private:
     void loadPixmap();
     void clampPaddle();
+    void stuckBall();
 
     QPixmap m_paddlePixmap;
     QPixmap m_blocksPixmap[5];
@@ -30,6 +31,8 @@ private:
 
     int m_paddleXpos;
     int m_paddleYpos;
+    int m_ballXpos;
+    int m_ballYpos;
     // QGraphicsScene interface
 protected:
     virtual void keyPressEvent(QKeyEvent *event) override;

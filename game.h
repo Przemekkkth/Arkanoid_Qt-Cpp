@@ -14,6 +14,7 @@ public:
     const QString PATH_TO_BLOCKS_PIXMAP[5];
     const size_t COUNT_OF_KIND_OF_BLOCKS;
     const float ITERATION_VALUE;
+    bool m_isBallStucked;
 };
 
 #endif // GAME_H
