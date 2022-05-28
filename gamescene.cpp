@@ -82,6 +82,14 @@ void GameScene::keyPressEvent(QKeyEvent *event)
             stuckBall();
         }
             break;
+        case Qt::Key_Space:
+        {
+            if(m_game.m_isBallStucked)
+            {
+                m_game.m_isBallStucked = false;
+            }
+        }
+            break;
         }
 
 
