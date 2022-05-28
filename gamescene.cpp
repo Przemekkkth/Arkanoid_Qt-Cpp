@@ -67,6 +67,10 @@ void GameScene::update()
 
         if (m_ballXpos < 0 || m_ballXpos > 520)  m_game.m_deltaX = -m_game.m_deltaX;
         if (m_ballYpos<0 || m_ballYpos > 450)  m_game.m_deltaY= -m_game.m_deltaY;
+        if (ballIteam->collidesWithItem(paddleIteam))
+        {
+            m_game.m_deltaY = -(rand()%5+2);
+        }
     }
 }
 
