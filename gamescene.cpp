@@ -5,14 +5,14 @@
 
 GameScene::GameScene(QObject *parent)
     : QGraphicsScene{parent}, m_game(), m_timer(new QTimer(this)), m_paddleXpos(300), m_paddleYpos(440),
-      m_ballXpos(300), m_ballYpos(428)
+      m_ballXpos(300), m_ballYpos(428), m_moveRight(false), m_moveLeft(false)
 {
     loadPixmap();
 
     setSceneRect(0, 0, m_game.RESOLUTION.width(), m_game.RESOLUTION.height());
     connect(m_timer, &QTimer::timeout, this, &GameScene::update);
     m_timer->start(m_game.ITERATION_VALUE);
-    stuckBall();
+    //stuckBall();
 }
 
 void GameScene::loadPixmap()
@@ -58,6 +58,16 @@ void GameScene::update()
 
     QGraphicsPixmapItem *ballIteam = new QGraphicsPixmapItem(m_ballPixmap);
     addItem(ballIteam);
+    if(m_moveLeft)
+    {
+        m_paddleXpos -= m_game.PADDLE_SPEED;
+    }
+    else if(m_moveRight)
+    {
+        m_paddleXpos += m_game.PADDLE_SPEED;
+    }
+    clampPaddle();
+    stuckBall();
     ballIteam->setPos(m_ballXpos, m_ballYpos);
 
     if(!m_game.m_isBallStucked)
@@ -81,17 +91,13 @@ void GameScene::keyPressEvent(QKeyEvent *event)
         case Qt::Key_Left:
         case Qt::Key_A:
         {
-            m_paddleXpos -= m_game.PADDLE_SPEED;
-            clampPaddle();
-            stuckBall();
+            m_moveLeft = true;
         }
             break;
         case Qt::Key_Right:
         case Qt::Key_D:
         {
-            m_paddleXpos += m_game.PADDLE_SPEED;
-            clampPaddle();
-            stuckBall();
+            m_moveRight = true;
         }
             break;
         case Qt::Key_Space:
@@ -114,9 +120,15 @@ void GameScene::keyReleaseEvent(QKeyEvent *event)
     case Qt::Key_Left:
     case Qt::Key_A:
     {
-
+        m_moveLeft = false;
     }
         break;
+    case Qt::Key_Right:
+    case Qt::Key_D:
+    {
+        m_moveRight = false;
+    }
+
     }
     QGraphicsScene::keyReleaseEvent(event);
 }

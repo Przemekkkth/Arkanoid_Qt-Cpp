@@ -33,6 +33,8 @@ private:
     int m_paddleYpos;
     int m_ballXpos;
     int m_ballYpos;
+
+    bool m_moveRight, m_moveLeft;
     // QGraphicsScene interface
 protected:
     virtual void keyPressEvent(QKeyEvent *event) override;
