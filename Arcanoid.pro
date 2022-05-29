@@ -7,12 +7,14 @@ CONFIG += c++11
 SOURCES += \
     game.cpp \
     gamescene.cpp \
+    level.cpp \
     main.cpp \
     view.cpp
 
 HEADERS += \
     game.h \
     gamescene.h \
+    level.h \
     view.h
 
 RESOURCES += \
