@@ -68,7 +68,7 @@ void GameScene::update()
     }
     clampPaddle();
     stuckBall();
-    ballIteam->setPos(m_ballXpos, m_ballYpos);
+
 
     if(!m_game.m_isBallStucked)
     {
@@ -76,12 +76,18 @@ void GameScene::update()
         m_ballYpos += m_game.m_deltaY;
 
         if (m_ballXpos < 0 || m_ballXpos > 520)  m_game.m_deltaX = -m_game.m_deltaX;
-        if (m_ballYpos<0 || m_ballYpos > 450)  m_game.m_deltaY= -m_game.m_deltaY;
-        if (ballIteam->collidesWithItem(paddleIteam))
+        if (m_ballYpos<0 || m_ballYpos > 550)  m_game.m_deltaY= -m_game.m_deltaY;
+        if (m_ballXpos >= m_paddleXpos &&
+            m_ballXpos + m_ballPixmap.width() <= m_paddleXpos + m_paddlePixmap.width() &&
+            m_ballYpos + m_ballPixmap.height() >= m_paddleYpos &&
+            m_paddleYpos + m_paddlePixmap.height()/2 >= m_ballYpos )
         {
+            m_ballYpos = paddleIteam->y() - m_ballPixmap.height();
             m_game.m_deltaY = -(rand()%5+2);
         }
+
     }
+    ballIteam->setPos(m_ballXpos, m_ballYpos);
 }
 
 void GameScene::keyPressEvent(QKeyEvent *event)
