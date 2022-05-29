@@ -12,7 +12,6 @@ GameScene::GameScene(QObject *parent)
     setSceneRect(0, 0, m_game.RESOLUTION.width(), m_game.RESOLUTION.height());
     connect(m_timer, &QTimer::timeout, this, &GameScene::update);
     m_timer->start(m_game.ITERATION_VALUE);
-    //stuckBall();
 }
 
 void GameScene::loadPixmap()
@@ -58,6 +57,11 @@ void GameScene::update()
 
     QGraphicsPixmapItem *ballIteam = new QGraphicsPixmapItem(m_ballPixmap);
     addItem(ballIteam);
+
+    QGraphicsPixmapItem *blockIteam = new QGraphicsPixmapItem(QPixmap(m_game.PATH_TO_BLOCKS_PIXMAP[0]));
+    addItem(blockIteam);
+    blockIteam->setPos(200, 200);
+
     if(m_moveLeft)
     {
         m_paddleXpos -= m_game.PADDLE_SPEED;
@@ -75,17 +79,24 @@ void GameScene::update()
         m_ballXpos += m_game.m_deltaX;
         m_ballYpos += m_game.m_deltaY;
 
-        if (m_ballXpos < 0 || m_ballXpos > 520)  m_game.m_deltaX = -m_game.m_deltaX;
+        if (m_ballXpos < 0 || m_ballXpos > m_game.RESOLUTION.width() - m_ballPixmap.width())  m_game.m_deltaX = -m_game.m_deltaX;
         if (m_ballYpos<0 || m_ballYpos > 550)  m_game.m_deltaY= -m_game.m_deltaY;
         if (m_ballXpos >= m_paddleXpos &&
-            m_ballXpos + m_ballPixmap.width() <= m_paddleXpos + m_paddlePixmap.width() &&
-            m_ballYpos + m_ballPixmap.height() >= m_paddleYpos &&
-            m_paddleYpos + m_paddlePixmap.height()/2 >= m_ballYpos )
+                m_ballXpos + m_ballPixmap.width() <= m_paddleXpos + m_paddlePixmap.width() &&
+                m_ballYpos + m_ballPixmap.height() >= m_paddleYpos &&
+                m_paddleYpos + m_paddlePixmap.height()/2 >= m_ballYpos )
         {
             m_ballYpos = paddleIteam->y() - m_ballPixmap.height();
             m_game.m_deltaY = -(rand()%5+2);
         }
 
+        if( QRectF(m_ballXpos, m_ballYpos, m_ballPixmap.width(), m_ballPixmap.height()).intersects(
+                    QRectF(blockIteam->pos().x(), blockIteam->pos().y(), blockIteam->boundingRect().width(), blockIteam->boundingRect().height()))
+                )
+        {
+            m_game.m_deltaX = -m_game.m_deltaX;
+            blockIteam->setPos(-100,-100);
+        }
     }
     ballIteam->setPos(m_ballXpos, m_ballYpos);
 }
@@ -93,28 +104,28 @@ void GameScene::update()
 void GameScene::keyPressEvent(QKeyEvent *event)
 {
 
-        switch (event->key()) {
-        case Qt::Key_Left:
-        case Qt::Key_A:
+    switch (event->key()) {
+    case Qt::Key_Left:
+    case Qt::Key_A:
+    {
+        m_moveLeft = true;
+    }
+        break;
+    case Qt::Key_Right:
+    case Qt::Key_D:
+    {
+        m_moveRight = true;
+    }
+        break;
+    case Qt::Key_Space:
+    {
+        if(m_game.m_isBallStucked)
         {
-            m_moveLeft = true;
+            m_game.m_isBallStucked = false;
         }
-            break;
-        case Qt::Key_Right:
-        case Qt::Key_D:
-        {
-            m_moveRight = true;
-        }
-            break;
-        case Qt::Key_Space:
-        {
-            if(m_game.m_isBallStucked)
-            {
-                m_game.m_isBallStucked = false;
-            }
-        }
-            break;
-        }
+    }
+        break;
+    }
 
 
     QGraphicsScene::keyPressEvent(event);
