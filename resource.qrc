@@ -9,5 +9,8 @@
         <file>images/paddle.png</file>
         <file>levels/level.lvl</file>
         <file>images/background.png</file>
+        <file>images/bg_victory.png</file>
+        <file>images/bg_pause.png</file>
+        <file>images/bg_gameover.png</file>
     </qresource>
 </RCC>

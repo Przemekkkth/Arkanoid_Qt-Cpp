@@ -68,9 +68,6 @@ void GameScene::update()
     QGraphicsPixmapItem *ballIteam = new QGraphicsPixmapItem(m_ballPixmap);
     addItem(ballIteam);
 
-    QGraphicsPixmapItem *blockIteam = new QGraphicsPixmapItem(QPixmap(m_game.PATH_TO_BLOCKS_PIXMAP[0]));
-    addItem(blockIteam);
-    blockIteam->setPos(200, 200);
 
     for(int i = 0; i < m_level.m_levelData->size(); ++i)
     {

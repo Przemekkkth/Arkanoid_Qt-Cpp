@@ -19,6 +19,12 @@ public:
     bool m_isBallStucked;
     int m_deltaX;
     int m_deltaY;
+
+    enum class State {
+        Active, Pause, GameOver, Win
+    };
+
+    State m_state;
 };
 
 #endif // GAME_H
