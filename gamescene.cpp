@@ -56,6 +56,8 @@ void GameScene::stuckBall()
 void GameScene::update()
 {
     clear();
+    m_blockItems.clear();
+    m_blockItems.resize(m_level.m_levelData->size());
     QGraphicsPixmapItem *bgIteam = new QGraphicsPixmapItem(m_bgPixmap.scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
     addItem(bgIteam);
 
@@ -76,7 +78,6 @@ void GameScene::update()
         m_blockItems[i]->setPos(m_level.m_levelData->at(i).position.x(),m_level.m_levelData->at(i).position.y() );
         addItem(m_blockItems[i]);
     }
-
     if(m_moveLeft)
     {
         m_paddleXpos -= m_game.PADDLE_SPEED;
@@ -92,10 +93,39 @@ void GameScene::update()
     if(!m_game.m_isBallStucked)
     {
         m_ballXpos += m_game.m_deltaX;
-        m_ballYpos += m_game.m_deltaY;
+        if (m_ballXpos < 0 || m_ballXpos > m_game.RESOLUTION.width() - m_ballPixmap.width())
+        {
+            m_game.m_deltaX = -m_game.m_deltaX;
+        }
+        for(int idx = 0; idx < m_level.m_levelData->count(); ++idx)
+        {
+            if( QRectF(m_ballXpos, m_ballYpos, m_ballPixmap.width(), m_ballPixmap.height()).intersects(
+                        QRectF(m_blockItems[idx]->pos().x(), m_blockItems[idx]->pos().y(), m_blockItems[idx]->boundingRect().width(), m_blockItems[idx]->boundingRect().height()))
+                    )
+            {
+                m_game.m_deltaX = -m_game.m_deltaX;
+                m_level.m_levelData->removeAt(idx);
+                m_blockItems[idx]->setPos(-100, -100);
+            }
+        }
 
-        if (m_ballXpos < 0 || m_ballXpos > m_game.RESOLUTION.width() - m_ballPixmap.width())  m_game.m_deltaX = -m_game.m_deltaX;
-        if (m_ballYpos<0 || m_ballYpos > 550)  m_game.m_deltaY= -m_game.m_deltaY;
+        m_ballYpos += m_game.m_deltaY;
+        if (m_ballYpos< 0 || m_ballYpos > 550)
+        {
+            m_game.m_deltaY= -m_game.m_deltaY;
+        }
+        for(int idx = 0; idx < m_level.m_levelData->count(); ++idx)
+        {
+            if( QRectF(m_ballXpos, m_ballYpos, m_ballPixmap.width(), m_ballPixmap.height()).intersects(
+                        QRectF(m_blockItems[idx]->pos().x(), m_blockItems[idx]->pos().y(), m_blockItems[idx]->boundingRect().width(), m_blockItems[idx]->boundingRect().height()))
+                    )
+            {
+                m_game.m_deltaY = -m_game.m_deltaY;
+                m_level.m_levelData->removeAt(idx);
+                m_blockItems[idx]->setPos(-100,-100);
+            }
+        }
+
         if (m_ballXpos >= m_paddleXpos &&
                 m_ballXpos + m_ballPixmap.width() <= m_paddleXpos + m_paddlePixmap.width() &&
                 m_ballYpos + m_ballPixmap.height() >= m_paddleYpos &&
@@ -105,13 +135,6 @@ void GameScene::update()
             m_game.m_deltaY = -(rand()%5+2);
         }
 
-        if( QRectF(m_ballXpos, m_ballYpos, m_ballPixmap.width(), m_ballPixmap.height()).intersects(
-                    QRectF(blockIteam->pos().x(), blockIteam->pos().y(), blockIteam->boundingRect().width(), blockIteam->boundingRect().height()))
-                )
-        {
-            m_game.m_deltaX = -m_game.m_deltaX;
-            blockIteam->setPos(-100,-100);
-        }
     }
     ballIteam->setPos(m_ballXpos, m_ballYpos);
 }
