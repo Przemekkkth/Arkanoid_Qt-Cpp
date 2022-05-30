@@ -7,6 +7,7 @@
         <file>images/block05.png</file>
         <file>images/block01.png</file>
         <file>images/paddle.png</file>
-        <file>images/background.jpg</file>
+        <file>levels/level.lvl</file>
+        <file>images/background.png</file>
     </qresource>
 </RCC>

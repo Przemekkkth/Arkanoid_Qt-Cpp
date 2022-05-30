@@ -3,7 +3,7 @@
 const size_t Game::COUNT_OF_KIND_OF_BLOCKS = 5;
 
 Game::Game()
-    : RESOLUTION(QSize(520, 450)), PATH_TO_BACKGROUND_PIXMAP(":/images/background.jpg"),
+    : RESOLUTION(QSize(520, 450)), PATH_TO_BACKGROUND_PIXMAP(":/images/background.png"),
       PATH_TO_PADDLE_PIXMAP(":/images/paddle.png"), PATH_TO_BALL_PIXMAP(":/images/ball.png"),
       PATH_TO_BLOCKS_PIXMAP{":/images/block01.png", ":/images/block02.png", ":/images/block03.png",
                             ":/images/block04.png", ":/images/block05.png"},

@@ -4,6 +4,7 @@
 #include <QGraphicsScene>
 #include <QPixmap>
 #include "game.h"
+#include "level.h"
 
 class QTimer;
 class GameScene : public QGraphicsScene
@@ -18,6 +19,7 @@ private slots:
 
 private:
     void loadPixmap();
+    void loadLevel(const QString& pathFile);
     void clampPaddle();
     void stuckBall();
 
@@ -27,6 +29,7 @@ private:
     QPixmap m_ballPixmap;
 
     Game m_game;
+    Level m_level;
     QTimer* m_timer;
 
     int m_paddleXpos;
@@ -35,6 +38,7 @@ private:
     int m_ballYpos;
 
     bool m_moveRight, m_moveLeft;
+    QVector<QGraphicsPixmapItem*> m_blockItems;
     // QGraphicsScene interface
 protected:
     virtual void keyPressEvent(QKeyEvent *event) override;

@@ -1,0 +1,7 @@
+//if you want to use comment use '//' on start line
+//data: colorValue(0,4);x;y
+0;0;0
+1;200;200
+2;300;300
+3;400;200
+4;500;200

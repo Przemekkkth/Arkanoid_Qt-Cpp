@@ -4,10 +4,11 @@
 #include <QGraphicsPixmapItem>
 
 GameScene::GameScene(QObject *parent)
-    : QGraphicsScene{parent}, m_game(), m_timer(new QTimer(this)), m_paddleXpos(300), m_paddleYpos(440),
+    : QGraphicsScene{parent}, m_game(), m_level(), m_timer(new QTimer(this)), m_paddleXpos(300), m_paddleYpos(440),
       m_ballXpos(300), m_ballYpos(428), m_moveRight(false), m_moveLeft(false)
 {
     loadPixmap();
+    loadLevel(":/levels/level.lvl");
 
     setSceneRect(0, 0, m_game.RESOLUTION.width(), m_game.RESOLUTION.height());
     connect(m_timer, &QTimer::timeout, this, &GameScene::update);
@@ -23,6 +24,13 @@ void GameScene::loadPixmap()
     }
     Q_ASSERT(m_bgPixmap.load(m_game.PATH_TO_BACKGROUND_PIXMAP));
     Q_ASSERT(m_ballPixmap.load(m_game.PATH_TO_BALL_PIXMAP));
+}
+
+void GameScene::loadLevel(const QString &pathFile)
+{
+    m_level.loadLevel(pathFile);
+    m_blockItems.clear();
+    m_blockItems.resize(m_level.m_levelData->size());
 }
 
 void GameScene::clampPaddle()
@@ -61,6 +69,13 @@ void GameScene::update()
     QGraphicsPixmapItem *blockIteam = new QGraphicsPixmapItem(QPixmap(m_game.PATH_TO_BLOCKS_PIXMAP[0]));
     addItem(blockIteam);
     blockIteam->setPos(200, 200);
+
+    for(int i = 0; i < m_level.m_levelData->size(); ++i)
+    {
+        m_blockItems[i] = new QGraphicsPixmapItem(QPixmap(m_game.PATH_TO_BLOCKS_PIXMAP[m_level.m_levelData->at(i).colorValue]));
+        m_blockItems[i]->setPos(m_level.m_levelData->at(i).position.x(),m_level.m_levelData->at(i).position.y() );
+        addItem(m_blockItems[i]);
+    }
 
     if(m_moveLeft)
     {
