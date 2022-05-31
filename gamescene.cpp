@@ -156,7 +156,7 @@ void GameScene::update()
                 m_game.m_deltaX = -m_game.m_deltaX;
                 m_game.m_score += 2;
                 m_level.m_levelData->removeAt(idx);
-                m_blockItems[idx]->setPos(-100, -100);
+                m_blockItems[idx]->hide();
 
             }
         }
@@ -180,7 +180,7 @@ void GameScene::update()
                 m_game.m_deltaY = -m_game.m_deltaY;
                 m_game.m_score += 2;
                 m_level.m_levelData->removeAt(idx);
-                m_blockItems[idx]->setPos(-100,-100);
+                m_blockItems[idx]->hide();
             }
         }
 
