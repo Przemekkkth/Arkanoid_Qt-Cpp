@@ -15,8 +15,10 @@ public:
     const QString PATH_TO_GAME_OVER_BG_PIXMAP;
     const QString PATH_TO_PAUSE_BG_PIXMAP;
     const QString PATH_TO_VICTORY_BG_PIXMAP;
+    const QString PATH_TO_ALL_NUMBERS_PIXMAP;
     static const size_t COUNT_OF_KIND_OF_BLOCKS;
     static const int DEATH_Y_LEVEL;
+    static const QSize NUMBER_SIZE;
     const float ITERATION_VALUE;
     const int PADDLE_SPEED;
 
@@ -29,6 +31,7 @@ public:
     };
 
     State m_state;
+    int m_score;
 };
 
 #endif // GAME_H

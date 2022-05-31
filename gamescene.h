@@ -23,6 +23,7 @@ private:
     void clampPaddle();
     void stuckBall();
     void checkVictory();
+    void drawScore();
 
     QPixmap m_paddlePixmap;
     QPixmap m_blocksPixmap[5];
@@ -31,6 +32,7 @@ private:
     QPixmap m_game_over_bgPixmap;
     QPixmap m_pause_bgPixmap;
     QPixmap m_victoryPixmap;
+    QPixmap m_allNumbersPixmap;
 
     Game m_game;
     Level m_level;

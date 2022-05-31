@@ -27,6 +27,7 @@ void GameScene::loadPixmap()
     Q_ASSERT(m_game_over_bgPixmap.load(m_game.PATH_TO_GAME_OVER_BG_PIXMAP));
     Q_ASSERT(m_pause_bgPixmap.load(m_game.PATH_TO_PAUSE_BG_PIXMAP));
     Q_ASSERT(m_victoryPixmap.load(m_game.PATH_TO_VICTORY_BG_PIXMAP));
+    Q_ASSERT(m_allNumbersPixmap.load(m_game.PATH_TO_ALL_NUMBERS_PIXMAP));
 }
 
 void GameScene::loadLevel(const QString &pathFile)
@@ -62,6 +63,47 @@ void GameScene::checkVictory()
     {
         m_game.m_state = Game::State::Win;
     }
+}
+
+void GameScene::drawScore()
+{
+    QString scoreText = QString::number(m_game.m_score);
+    int unityPartVal = 0;
+    int decimalPartValue = 0;
+    int hendredthPartValue = 0;
+
+    if(scoreText.length() == 1) // 0 - 9
+    {
+        unityPartVal = scoreText.toInt();
+        decimalPartValue = 0;
+        hendredthPartValue = 0;
+    }
+    else if(scoreText.length() == 2) // 10 - 99
+    {
+        unityPartVal = scoreText.last(1).toInt();
+        decimalPartValue = scoreText.first(1).toInt();
+        hendredthPartValue = 0;
+    }
+    else if(scoreText.length() == 3) // 100 - 999
+    {
+        unityPartVal = scoreText.last(1).toInt();
+        hendredthPartValue = scoreText.first(1).toInt();
+        QString copyVal = scoreText;
+        copyVal.chop(1);
+        decimalPartValue = copyVal.last(1).toInt();
+    }
+
+    QGraphicsPixmapItem* unityPartScoreItem = new QGraphicsPixmapItem(m_allNumbersPixmap.copy(unityPartVal * Game::NUMBER_SIZE.width(), 0, Game::NUMBER_SIZE.width(), Game::NUMBER_SIZE.width()));
+    unityPartScoreItem->moveBy( m_game.RESOLUTION.width() - Game::NUMBER_SIZE.width(), 0);
+    addItem(unityPartScoreItem);
+
+    QGraphicsPixmapItem* decimalPartScoreItem = new QGraphicsPixmapItem(m_allNumbersPixmap.copy(decimalPartValue * Game::NUMBER_SIZE.width(), 0, Game::NUMBER_SIZE.width(), Game::NUMBER_SIZE.width()));
+    decimalPartScoreItem->moveBy(m_game.RESOLUTION.width() - 2 * Game::NUMBER_SIZE.width(), 0);
+    addItem(decimalPartScoreItem);
+
+    QGraphicsPixmapItem* hundrethPartScoreItem = new QGraphicsPixmapItem(m_allNumbersPixmap.copy(hendredthPartValue * Game::NUMBER_SIZE.width(), 0, Game::NUMBER_SIZE.width(), Game::NUMBER_SIZE.height()));
+    hundrethPartScoreItem->moveBy(m_game.RESOLUTION.width() - 3 * Game::NUMBER_SIZE.width(), 0);
+    addItem(hundrethPartScoreItem);
 }
 
 void GameScene::update()
@@ -112,8 +154,10 @@ void GameScene::update()
                     )
             {
                 m_game.m_deltaX = -m_game.m_deltaX;
+                m_game.m_score += 2;
                 m_level.m_levelData->removeAt(idx);
                 m_blockItems[idx]->setPos(-100, -100);
+
             }
         }
 
@@ -134,6 +178,7 @@ void GameScene::update()
                     )
             {
                 m_game.m_deltaY = -m_game.m_deltaY;
+                m_game.m_score += 2;
                 m_level.m_levelData->removeAt(idx);
                 m_blockItems[idx]->setPos(-100,-100);
             }
@@ -153,6 +198,7 @@ void GameScene::update()
     }
     ballIteam->setPos(m_ballXpos, m_ballYpos);
 
+    drawScore();
     if(m_game.m_state == Game::State::GameOver)
     {
         QGraphicsPixmapItem *goBgIteam = new QGraphicsPixmapItem(m_game_over_bgPixmap.scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
