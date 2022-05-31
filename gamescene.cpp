@@ -2,6 +2,8 @@
 #include <QTimer>
 #include <QKeyEvent>
 #include <QGraphicsPixmapItem>
+#include <QDir>
+#include <QPainter>
 
 GameScene::GameScene(QObject *parent)
     : QGraphicsScene{parent}, m_game(), m_level(), m_timer(new QTimer(this)), m_paddleXpos(300), m_paddleYpos(440),
@@ -124,6 +126,19 @@ void GameScene::reset()
     m_level.loadLevel(":/levels/level.lvl");
 }
 
+void GameScene::renderScene()
+{
+    static int index = 0;
+    QString fileName = QDir::currentPath() + QDir::separator() + "screen" + QString::number(index++) + ".png";
+    QRect rect = sceneRect().toAlignedRect();
+    QImage image(rect.size(), QImage::Format_ARGB32);
+    image.fill(Qt::transparent);
+    QPainter painter(&image);
+    render(&painter);
+    image.save(fileName);
+    qDebug() << "saved " << fileName;
+}
+
 void GameScene::update()
 {
     clear();
@@ -173,7 +188,6 @@ void GameScene::update()
             {
                 m_game.m_deltaX = -m_game.m_deltaX;
                 m_game.m_score += 2;
-                m_level.m_levelData->removeAt(idx);
                 m_blockItems[idx]->hide();
 
             }
@@ -197,11 +211,17 @@ void GameScene::update()
             {
                 m_game.m_deltaY = -m_game.m_deltaY;
                 m_game.m_score += 2;
-                m_level.m_levelData->removeAt(idx);
                 m_blockItems[idx]->hide();
             }
         }
 
+        for(int idx = 0; idx < m_blockItems.size(); ++idx)
+        {
+            if(!m_blockItems[idx]->isVisible())
+            {
+                m_level.m_levelData->removeAt(idx);
+            }
+        }
         checkVictory();
 
         if (m_ballXpos >= m_paddleXpos &&
@@ -280,16 +300,19 @@ void GameScene::keyPressEvent(QKeyEvent *event)
     }
         break;
     case Qt::Key_R:
+    {
+        if(m_game.m_state == Game::State::GameOver || m_game.m_state == Game::State::Win)
         {
-            if(m_game.m_state == Game::State::GameOver || m_game.m_state == Game::State::Win)
-            {
-                reset();
-            }
+            reset();
         }
+    }
+        break;
+    case Qt::Key_Z:
+    {
+        renderScene();
+    }
         break;
     }
-
-
     QGraphicsScene::keyPressEvent(event);
 }
 

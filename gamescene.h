@@ -25,6 +25,7 @@ private:
     void checkVictory();
     void drawScore();
     void reset();
+    void renderScene();
 
     QPixmap m_paddlePixmap;
     QPixmap m_blocksPixmap[5];

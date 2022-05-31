@@ -13,5 +13,6 @@
         <file>images/bg_pause.png</file>
         <file>images/bg_gameover.png</file>
         <file>images/all_numbers.png</file>
+        <file>levels/qt_level.lvl</file>
     </qresource>
 </RCC>
