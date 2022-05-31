@@ -24,6 +24,9 @@ void GameScene::loadPixmap()
     }
     Q_ASSERT(m_bgPixmap.load(m_game.PATH_TO_BACKGROUND_PIXMAP));
     Q_ASSERT(m_ballPixmap.load(m_game.PATH_TO_BALL_PIXMAP));
+    Q_ASSERT(m_game_over_bgPixmap.load(m_game.PATH_TO_GAME_OVER_BG_PIXMAP));
+    Q_ASSERT(m_pause_bgPixmap.load(m_game.PATH_TO_PAUSE_BG_PIXMAP));
+    Q_ASSERT(m_victoryPixmap.load(m_game.PATH_TO_VICTORY_BG_PIXMAP));
 }
 
 void GameScene::loadLevel(const QString &pathFile)
@@ -50,6 +53,14 @@ void GameScene::stuckBall()
     if(m_game.m_isBallStucked)
     {
         m_ballXpos = m_paddleXpos + m_paddlePixmap.width()/2 - m_ballPixmap.width()/2;
+    }
+}
+
+void GameScene::checkVictory()
+{
+    if(m_level.m_levelData->isEmpty())
+    {
+        m_game.m_state = Game::State::Win;
     }
 }
 
@@ -87,7 +98,7 @@ void GameScene::update()
     stuckBall();
 
 
-    if(!m_game.m_isBallStucked)
+    if(!m_game.m_isBallStucked && m_game.m_state == Game::State::Active)
     {
         m_ballXpos += m_game.m_deltaX;
         if (m_ballXpos < 0 || m_ballXpos > m_game.RESOLUTION.width() - m_ballPixmap.width())
@@ -107,10 +118,15 @@ void GameScene::update()
         }
 
         m_ballYpos += m_game.m_deltaY;
-        if (m_ballYpos< 0 || m_ballYpos > 550)
+        if (m_ballYpos< 0)
         {
             m_game.m_deltaY= -m_game.m_deltaY;
         }
+        else if(m_ballYpos > Game::DEATH_Y_LEVEL)
+        {
+            m_game.m_state = Game::State::GameOver;
+        }
+
         for(int idx = 0; idx < m_level.m_levelData->count(); ++idx)
         {
             if( QRectF(m_ballXpos, m_ballYpos, m_ballPixmap.width(), m_ballPixmap.height()).intersects(
@@ -123,6 +139,8 @@ void GameScene::update()
             }
         }
 
+        checkVictory();
+
         if (m_ballXpos >= m_paddleXpos &&
                 m_ballXpos + m_ballPixmap.width() <= m_paddleXpos + m_paddlePixmap.width() &&
                 m_ballYpos + m_ballPixmap.height() >= m_paddleYpos &&
@@ -134,6 +152,22 @@ void GameScene::update()
 
     }
     ballIteam->setPos(m_ballXpos, m_ballYpos);
+
+    if(m_game.m_state == Game::State::GameOver)
+    {
+        QGraphicsPixmapItem *goBgIteam = new QGraphicsPixmapItem(m_game_over_bgPixmap.scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
+        addItem(goBgIteam);
+    }
+    else if(m_game.m_state == Game::State::Pause)
+    {
+        QGraphicsPixmapItem *pauseBgIteam = new QGraphicsPixmapItem(m_pause_bgPixmap.scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
+        addItem(pauseBgIteam);
+    }
+    else if(m_game.m_state == Game::State::Win)
+    {
+        QGraphicsPixmapItem *victoryBgIteam = new QGraphicsPixmapItem(m_victoryPixmap.scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
+        addItem(victoryBgIteam);
+    }
 }
 
 void GameScene::keyPressEvent(QKeyEvent *event)
@@ -143,20 +177,41 @@ void GameScene::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Left:
     case Qt::Key_A:
     {
-        m_moveLeft = true;
+        if(m_game.m_state == Game::State::Active)
+        {
+            m_moveLeft = true;
+        }
     }
         break;
     case Qt::Key_Right:
     case Qt::Key_D:
     {
-        m_moveRight = true;
+        if(m_game.m_state == Game::State::Active)
+        {
+            m_moveRight = true;
+        }
     }
         break;
     case Qt::Key_Space:
     {
-        if(m_game.m_isBallStucked)
+        if(m_game.m_state == Game::State::Active)
         {
-            m_game.m_isBallStucked = false;
+            if(m_game.m_isBallStucked)
+            {
+                m_game.m_isBallStucked = false;
+            }
+        }
+    }
+        break;
+    case Qt::Key_P:
+    {
+        if(m_game.m_state == Game::State::Active)
+        {
+            m_game.m_state = Game::State::Pause;
+        }
+        else if(m_game.m_state == Game::State::Pause)
+        {
+            m_game.m_state = Game::State::Active;
         }
     }
         break;

@@ -12,7 +12,11 @@ public:
     const QString PATH_TO_PADDLE_PIXMAP;
     const QString PATH_TO_BALL_PIXMAP;
     const QString PATH_TO_BLOCKS_PIXMAP[5];
+    const QString PATH_TO_GAME_OVER_BG_PIXMAP;
+    const QString PATH_TO_PAUSE_BG_PIXMAP;
+    const QString PATH_TO_VICTORY_BG_PIXMAP;
     static const size_t COUNT_OF_KIND_OF_BLOCKS;
+    static const int DEATH_Y_LEVEL;
     const float ITERATION_VALUE;
     const int PADDLE_SPEED;
 

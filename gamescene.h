@@ -22,11 +22,15 @@ private:
     void loadLevel(const QString& pathFile);
     void clampPaddle();
     void stuckBall();
+    void checkVictory();
 
     QPixmap m_paddlePixmap;
     QPixmap m_blocksPixmap[5];
     QPixmap m_bgPixmap;
     QPixmap m_ballPixmap;
+    QPixmap m_game_over_bgPixmap;
+    QPixmap m_pause_bgPixmap;
+    QPixmap m_victoryPixmap;
 
     Game m_game;
     Level m_level;
