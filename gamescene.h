@@ -24,6 +24,7 @@ private:
     void stuckBall();
     void checkVictory();
     void drawScore();
+    void reset();
 
     QPixmap m_paddlePixmap;
     QPixmap m_blocksPixmap[5];

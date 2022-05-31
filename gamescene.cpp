@@ -106,6 +106,24 @@ void GameScene::drawScore()
     addItem(hundrethPartScoreItem);
 }
 
+void GameScene::reset()
+{
+    m_paddleXpos = 300;
+    m_paddleYpos = 440;
+    m_moveRight = false;
+    m_moveLeft = false;
+    m_ballXpos = 300;
+    m_ballYpos = 428;
+
+    m_game.m_score = 0;
+    m_game.m_state = Game::State::Active;
+    m_game.m_isBallStucked = true;
+    m_game.m_deltaX = 5;
+    m_game.m_deltaY = -6;
+
+    m_level.loadLevel(":/levels/level.lvl");
+}
+
 void GameScene::update()
 {
     clear();
@@ -260,6 +278,14 @@ void GameScene::keyPressEvent(QKeyEvent *event)
             m_game.m_state = Game::State::Active;
         }
     }
+        break;
+    case Qt::Key_R:
+        {
+            if(m_game.m_state == Game::State::GameOver || m_game.m_state == Game::State::Win)
+            {
+                reset();
+            }
+        }
         break;
     }
 
