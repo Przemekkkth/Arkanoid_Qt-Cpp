@@ -10,7 +10,7 @@ GameScene::GameScene(QObject *parent)
       m_ballXpos(300), m_ballYpos(428), m_moveRight(false), m_moveLeft(false)
 {
     loadPixmap();
-    loadLevel(":/levels/level.lvl");
+    loadLevel();
 
     setSceneRect(0, 0, m_game.RESOLUTION.width(), m_game.RESOLUTION.height());
     connect(m_timer, &QTimer::timeout, this, &GameScene::update);
@@ -123,7 +123,7 @@ void GameScene::reset()
     m_game.m_deltaX = 5;
     m_game.m_deltaY = -6;
 
-    m_level.loadLevel(":/levels/level.lvl");
+    loadLevel();
 }
 
 void GameScene::renderScene()
