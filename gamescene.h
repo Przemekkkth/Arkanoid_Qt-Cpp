@@ -19,7 +19,7 @@ private slots:
 
 private:
     void loadPixmap();
-    void loadLevel(const QString& pathFile = ":/levels/umbrella.lvl");
+    void loadLevel(const QString& pathFile = ":/levels/character.lvl");
     void clampPaddle();
     void stuckBall();
     void checkVictory();

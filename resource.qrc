@@ -16,5 +16,6 @@
         <file>levels/qt_level.lvl</file>
         <file>levels/head_level.lvl</file>
         <file>levels/umbrella.lvl</file>
+        <file>levels/character.lvl</file>
     </qresource>
 </RCC>
