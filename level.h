@@ -7,6 +7,7 @@ struct LevelData
 {
     int colorValue;
     QPoint position;
+    bool isDeleted;
 };
 
 class Level
@@ -15,7 +16,7 @@ public:
     Level();
     ~Level();
     void loadLevel(const QString& pathFile);
-    QVector<LevelData>* m_levelData;
+    QList<LevelData>* m_levelData;
 };
 
 #endif // LEVEL_H

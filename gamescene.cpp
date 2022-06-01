@@ -189,7 +189,10 @@ void GameScene::update()
                 m_game.m_deltaX = -m_game.m_deltaX;
                 m_game.m_score += 2;
                 m_blockItems[idx]->hide();
-
+                LevelData data = m_level.m_levelData->at(idx);
+                data.isDeleted = true;
+                m_level.m_levelData->removeAt(idx);
+                m_level.m_levelData->insert(idx, data);
             }
         }
 
@@ -212,15 +215,17 @@ void GameScene::update()
                 m_game.m_deltaY = -m_game.m_deltaY;
                 m_game.m_score += 2;
                 m_blockItems[idx]->hide();
+                LevelData data = m_level.m_levelData->at(idx);
+                data.isDeleted = true;
+                m_level.m_levelData->removeAt(idx);
+                m_level.m_levelData->insert(idx, data);
             }
         }
 
-        for(int idx = 0; idx < m_blockItems.size(); ++idx)
+        for(int idx = 0; idx < m_level.m_levelData->size(); ++idx)
         {
-            if(!m_blockItems[idx]->isVisible())
-            {
-                m_level.m_levelData->removeAt(idx);
-            }
+            if(m_level.m_levelData->at(idx).isDeleted   )
+            m_level.m_levelData->removeAt(idx);
         }
         checkVictory();
 

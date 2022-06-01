@@ -49,6 +49,8 @@ void Level::loadLevel(const QString &pathFile)
         QPoint position = QPoint(x,y);
         levelData.position = position;
 
+        levelData.isDeleted = false;
+
         m_levelData->push_back(levelData);
     }
 
