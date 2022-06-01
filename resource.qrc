@@ -15,5 +15,6 @@
         <file>images/all_numbers.png</file>
         <file>levels/qt_level.lvl</file>
         <file>levels/head_level.lvl</file>
+        <file>levels/umbrella.lvl</file>
     </qresource>
 </RCC>
