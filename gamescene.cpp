@@ -147,15 +147,15 @@ void GameScene::update()
     clear();
     m_blockItems.clear();
     m_blockItems.resize(m_level.m_levelData->size());
-    QGraphicsPixmapItem *bgIteam = new QGraphicsPixmapItem(m_bgPixmap.scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
+    QGraphicsPixmapItem *bgIteam = new QGraphicsPixmapItem(QPixmap(m_game.PATH_TO_BACKGROUND_PIXMAP).scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
     addItem(bgIteam);
 
-    QGraphicsPixmapItem *paddleIteam = new QGraphicsPixmapItem(m_paddlePixmap);
-    addItem(paddleIteam);
-    paddleIteam->setPos(m_paddleXpos, m_paddleYpos);
+    QGraphicsPixmapItem *paddleItem = new QGraphicsPixmapItem(QPixmap(m_game.PATH_TO_PADDLE_PIXMAP));
+    addItem(paddleItem);
+    paddleItem->setPos(m_paddleXpos, m_paddleYpos);
 
-    QGraphicsPixmapItem *ballIteam = new QGraphicsPixmapItem(m_ballPixmap);
-    addItem(ballIteam);
+    QGraphicsPixmapItem *ballItem = new QGraphicsPixmapItem(QPixmap(m_game.PATH_TO_BALL_PIXMAP));
+    addItem(ballItem);
 
 
     for(int i = 0; i < m_level.m_levelData->size(); ++i)
@@ -237,27 +237,27 @@ void GameScene::update()
                 m_ballYpos + m_ballPixmap.height() >= m_paddleYpos &&
                 m_paddleYpos + m_paddlePixmap.height()/2 >= m_ballYpos )
         {
-            m_ballYpos = paddleIteam->y() - m_ballPixmap.height();
+            m_ballYpos = paddleItem->y() - m_ballPixmap.height();
             m_game.m_deltaY = -(rand()%5+2);
         }
 
     }
-    ballIteam->setPos(m_ballXpos, m_ballYpos);
+    ballItem->setPos(m_ballXpos, m_ballYpos);
 
     drawScore();
     if(m_game.m_state == Game::State::GameOver)
     {
-        QGraphicsPixmapItem *goBgIteam = new QGraphicsPixmapItem(m_game_over_bgPixmap.scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
+        QGraphicsPixmapItem *goBgIteam = new QGraphicsPixmapItem(QPixmap(m_game.PATH_TO_GAME_OVER_BG_PIXMAP).scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
         addItem(goBgIteam);
     }
     else if(m_game.m_state == Game::State::Pause)
     {
-        QGraphicsPixmapItem *pauseBgIteam = new QGraphicsPixmapItem(m_pause_bgPixmap.scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
+        QGraphicsPixmapItem *pauseBgIteam = new QGraphicsPixmapItem(QPixmap(m_game.PATH_TO_PAUSE_BG_PIXMAP).scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
         addItem(pauseBgIteam);
     }
     else if(m_game.m_state == Game::State::Win)
     {
-        QGraphicsPixmapItem *victoryBgIteam = new QGraphicsPixmapItem(m_victoryPixmap.scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
+        QGraphicsPixmapItem *victoryBgIteam = new QGraphicsPixmapItem(QPixmap(m_game.PATH_TO_VICTORY_BG_PIXMAP).scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
         addItem(victoryBgIteam);
     }
 }
