@@ -24,7 +24,7 @@ private:
     //3) ":/levels/head_level.lvl"
     //4) ":/levels/qt_level.lvl"
     //5) ":/levels/umbrella.lvl"
-    void loadLevel(const QString& pathFile = ":/levels/level.lvl");
+    void loadLevel(const QString& pathFile = ":/levels/character.lvl");
     void clampPaddle();
     void stuckBall();
     void checkVictory();

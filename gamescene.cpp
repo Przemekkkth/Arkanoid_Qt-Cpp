@@ -9,12 +9,12 @@ GameScene::GameScene(QObject *parent)
     : QGraphicsScene{parent}, m_game(), m_level(), m_timer(new QTimer(this)), m_paddleXpos(300), m_paddleYpos(440),
       m_ballXpos(300), m_ballYpos(428), m_moveRight(false), m_moveLeft(false)
 {
-
+    loadPixmap();
+    loadLevel();
 
     setSceneRect(0, 0, m_game.RESOLUTION.width(), m_game.RESOLUTION.height());
     connect(m_timer, &QTimer::timeout, [this](){
-        loadPixmap();
-        loadLevel();
+
         update();
     });
     m_timer->start(m_game.ITERATION_VALUE);
