@@ -22,24 +22,85 @@ GameScene::GameScene(QObject *parent)
 
 void GameScene::loadPixmap()
 {
-    Q_ASSERT(m_paddlePixmap.load(m_game.PATH_TO_PADDLE_PIXMAP));
+    if(m_paddlePixmap.load(m_game.PATH_TO_PADDLE_PIXMAP))
+    {
+        qDebug() << "PaddlePixmap is loaded successully";
+    }
+    else
+    {
+        qDebug() << "PaddlePixmap is not loaded successully";
+    }
     for(size_t i = 0; i < m_game.COUNT_OF_KIND_OF_BLOCKS; ++i)
     {
-        Q_ASSERT(m_blocksPixmap[i].load(m_game.PATH_TO_BLOCKS_PIXMAP[i]));
+        if(m_blocksPixmap[i].load(m_game.PATH_TO_BLOCKS_PIXMAP[i]))
+        {
+            qDebug() << "BlockPixmap["<< i << "] is loaded successully";
+        }
+        else
+        {
+            qDebug() << "BlockPixmap["<< i << "] is not loaded successully";
+        }
     }
-    Q_ASSERT(m_bgPixmap.load(m_game.PATH_TO_BACKGROUND_PIXMAP));
-    Q_ASSERT(m_ballPixmap.load(m_game.PATH_TO_BALL_PIXMAP));
-    Q_ASSERT(m_game_over_bgPixmap.load(m_game.PATH_TO_GAME_OVER_BG_PIXMAP));
-    Q_ASSERT(m_pause_bgPixmap.load(m_game.PATH_TO_PAUSE_BG_PIXMAP));
-    Q_ASSERT(m_victoryPixmap.load(m_game.PATH_TO_VICTORY_BG_PIXMAP));
-    Q_ASSERT(m_allNumbersPixmap.load(m_game.PATH_TO_ALL_NUMBERS_PIXMAP));
+    if(m_bgPixmap.load(m_game.PATH_TO_BACKGROUND_PIXMAP))
+    {
+        qDebug() << "BgPixmap is loaded successully";
+    }
+    else
+    {
+        qDebug() << "BgPixmap is not loaded successully";
+    }
+
+    if(m_ballPixmap.load(m_game.PATH_TO_BALL_PIXMAP))
+    {
+        qDebug() << "BallPixmap is loaded successully";
+    }
+    else
+    {
+        qDebug() << "BallPixmap is not loaded successully";
+    }
+
+    if(m_game_over_bgPixmap.load(m_game.PATH_TO_GAME_OVER_BG_PIXMAP))
+    {
+        qDebug() << "GameOverBgPixmap is loaded successully";
+    }
+    else
+    {
+        qDebug() << "GameOverBgPixmap is not loaded successully";
+    }
+
+    if(m_pause_bgPixmap.load(m_game.PATH_TO_PAUSE_BG_PIXMAP))
+    {
+        qDebug() << "PauseBgPixmap is loaded successully";
+    }
+    else
+    {
+        qDebug() << "PauseBgPixmap is not loaded successully";
+    }
+
+    if(m_victoryPixmap.load(m_game.PATH_TO_VICTORY_BG_PIXMAP))
+    {
+        qDebug() << "VictoryBgPixmap is loaded successully";
+    }
+    else
+    {
+        qDebug() << "VictoryBgPixmap is not loaded successully";
+    }
+
+    if(m_allNumbersPixmap.load(m_game.PATH_TO_ALL_NUMBERS_PIXMAP))
+    {
+        qDebug() << "AllNumbersPixmap is loaded successully";
+    }
+    else
+    {
+        qDebug() << "AllNumbersPixmap is not loaded successully";
+    }
 }
 
 void GameScene::loadLevel(const QString &pathFile)
 {
     m_level.loadLevel(pathFile);
     m_blockItems.clear();
-    m_blockItems.resize(m_level.m_levelData->size());
+
 }
 
 void GameScene::clampPaddle()
@@ -147,23 +208,25 @@ void GameScene::update()
     clear();
     m_blockItems.clear();
     m_blockItems.resize(m_level.m_levelData->size());
-    QGraphicsPixmapItem *bgIteam = new QGraphicsPixmapItem(QPixmap(m_game.PATH_TO_BACKGROUND_PIXMAP).scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
+    QGraphicsPixmapItem *bgIteam = new QGraphicsPixmapItem(m_bgPixmap.scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
     addItem(bgIteam);
 
-    QGraphicsPixmapItem *paddleItem = new QGraphicsPixmapItem(QPixmap(m_game.PATH_TO_PADDLE_PIXMAP));
+    QGraphicsPixmapItem *paddleItem = new QGraphicsPixmapItem(m_paddlePixmap);
     addItem(paddleItem);
     paddleItem->setPos(m_paddleXpos, m_paddleYpos);
 
-    QGraphicsPixmapItem *ballItem = new QGraphicsPixmapItem(QPixmap(m_game.PATH_TO_BALL_PIXMAP));
+    QGraphicsPixmapItem *ballItem = new QGraphicsPixmapItem(m_ballPixmap);
     addItem(ballItem);
 
 
     for(int i = 0; i < m_level.m_levelData->size(); ++i)
     {
-        m_blockItems[i] = new QGraphicsPixmapItem(QPixmap(m_game.PATH_TO_BLOCKS_PIXMAP[m_level.m_levelData->at(i).colorValue]));
-        m_blockItems[i]->setPos(m_level.m_levelData->at(i).position.x(),m_level.m_levelData->at(i).position.y() );
-        addItem(m_blockItems[i]);
+        QGraphicsPixmapItem *block = new QGraphicsPixmapItem(m_blocksPixmap[m_level.m_levelData->at(i).colorValue]);
+        block->setPos(m_level.m_levelData->at(i).position.x(), m_level.m_levelData->at(i).position.y() );
+        m_blockItems[i] = block;
+        addItem(block);
     }
+
     if(m_moveLeft)
     {
         m_paddleXpos -= m_game.PADDLE_SPEED;
@@ -185,6 +248,11 @@ void GameScene::update()
         }
         for(int idx = 0; idx < m_level.m_levelData->count(); ++idx)
         {
+
+            if(!m_blockItems[idx])
+            {
+                continue;
+            }
             if( QRectF(m_ballXpos, m_ballYpos, m_ballPixmap.width(), m_ballPixmap.height()).intersects(
                         QRectF(m_blockItems[idx]->pos().x(), m_blockItems[idx]->pos().y(), m_blockItems[idx]->boundingRect().width(), m_blockItems[idx]->boundingRect().height()))
                     )
@@ -209,8 +277,13 @@ void GameScene::update()
             m_game.m_state = Game::State::GameOver;
         }
 
+        m_blockItems.resize(m_level.m_levelData->count());
         for(int idx = 0; idx < m_level.m_levelData->count(); ++idx)
         {
+            if(!m_blockItems[idx])
+            {
+                continue;
+            }
             if( QRectF(m_ballXpos, m_ballYpos, m_ballPixmap.width(), m_ballPixmap.height()).intersects(
                         QRectF(m_blockItems[idx]->pos().x(), m_blockItems[idx]->pos().y(), m_blockItems[idx]->boundingRect().width(), m_blockItems[idx]->boundingRect().height()))
                     )
@@ -247,17 +320,17 @@ void GameScene::update()
     drawScore();
     if(m_game.m_state == Game::State::GameOver)
     {
-        QGraphicsPixmapItem *goBgIteam = new QGraphicsPixmapItem(QPixmap(m_game.PATH_TO_GAME_OVER_BG_PIXMAP).scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
+        QGraphicsPixmapItem *goBgIteam = new QGraphicsPixmapItem(m_game_over_bgPixmap.scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
         addItem(goBgIteam);
     }
     else if(m_game.m_state == Game::State::Pause)
     {
-        QGraphicsPixmapItem *pauseBgIteam = new QGraphicsPixmapItem(QPixmap(m_game.PATH_TO_PAUSE_BG_PIXMAP).scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
+        QGraphicsPixmapItem *pauseBgIteam = new QGraphicsPixmapItem(m_pause_bgPixmap.scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
         addItem(pauseBgIteam);
     }
     else if(m_game.m_state == Game::State::Win)
     {
-        QGraphicsPixmapItem *victoryBgIteam = new QGraphicsPixmapItem(QPixmap(m_game.PATH_TO_VICTORY_BG_PIXMAP).scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
+        QGraphicsPixmapItem *victoryBgIteam = new QGraphicsPixmapItem(m_victoryPixmap.scaled(m_game.RESOLUTION.width(), m_game.RESOLUTION.height()));
         addItem(victoryBgIteam);
     }
 }

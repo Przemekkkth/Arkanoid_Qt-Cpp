@@ -19,7 +19,14 @@ void Level::loadLevel(const QString &pathFile)
 {
     QFile file(pathFile);
 
-    Q_ASSERT(file.open(QIODeviceBase::Text | QIODeviceBase::ReadOnly));
+    if(file.open(QIODeviceBase::Text | QIODeviceBase::ReadOnly))
+    {
+        qDebug() << "Level is loaded successully";
+    }
+    else
+    {
+        qDebug() << "Level is not loaded successully";
+    }
     m_levelData->clear();
     QTextStream stream(&file);
     while (!stream.atEnd() ) {
