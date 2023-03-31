@@ -23,4 +23,4 @@ qmake && make
 ## Addons
 * [Qt](https://www.qt.io/) - Cross-Platform software for embedded & desktop
 * [Video](https://youtu.be/8ak5AxXh-3U) - gameplay on youtube
-
+* [Play online](https://przemekkkth.github.io/assets/games/arkanoid/index.html)
